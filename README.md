@@ -1,141 +1,91 @@
-# Bitte AI Agent NextJS Template
+# Agent Next.js Boilerplate for bitte.ai
 
-This template provides a starting point for creating AI agents using the Bitte Protocol with Next.js. It includes pre-configured endpoints and tools that demonstrate common agent functionalities.
+This project is a Next.js application that serves as an "Open Agent" for the bitte.ai platform. It provides a set of API endpoints defined in an OpenAPI-compatible format, which bitte.ai Runtime can interact with to perform tasks.
 
-## Features
+## Project Structure
 
-- 🤖 Pre-configured AI agent setup
-- 🛠️ Built-in tools and endpoints:
-  - Blockchain information retrieval
-  - NEAR transaction generation
-  - Reddit frontpage fetching
-  - Twitter share intent generation
-  - Coin flip functionality
-- ⚡ Next.js 14 with App Router
-- 🎨 Tailwind CSS for styling
-- 📝 TypeScript support
-- 🔄 Hot reload development environment
+-   `/src/app/api/tools/`: Contains the logic for individual tools (API endpoints) that the agent exposes.
+-   `/src/app/api/ai-plugin/route.ts`: Generates the AI plugin manifest and OpenAPI specification required by bitte.ai. This is available at the `/api/ai-plugin` endpoint after deployment.
+-   `/public/`: Static assets.
+-   `.env`: Contains environment variables. **A corresponding production environment configuration will be required.**
 
-## Quick Start
+## Prerequisites
 
-1. Clone this repository
-2. Configure environment variables (create a `.env` or `.env.local` file)
+-   Node.js (version specified in `package.json` or latest LTS)
+-   npm or pnpm
 
-```bash
-# Get your API key from https://key.bitte.ai
-BITTE_API_KEY='your-api-key'
+## Setup and Local Development
 
-ACCOUNT_ID='your-account.near'
-```
+1.  Clone the repository.
+2.  Install dependencies:
+    ```bash
+    npm install
+    # or
+    pnpm install
+    ```
+3.  Create a `.env` file based on `.env.example` (if available) or provide necessary environment variables.
+4.  Run the development server:
+    ```bash
+    npm run dev
+    ```
+    The application will be available at `http://localhost:3000`. The AI plugin manifest will be at `http://localhost:3000/api/ai-plugin`.
 
-3. Install dependencies:
+## Build for Production
 
-```bash
-pnpm install
-```
-
-4. Start the development server:
+To create a production build, run:
 
 ```bash
-pnpm run dev
+npm run build
 ```
 
-This will:
+This will create an optimized build in the `.next` directory.
 
-- Start your Next.js application
-- Launch make-agent
-- Prompt you to sign a message in Bitte wallet to create an API key
-- Launch your agent in the Bitte playground
-- Allow you to freely edit and develop your code in the playground environment
+## Running in Production
 
-5. Build the project locally:
+To start the application in production mode after a successful build:
 
 ```bash
-pnpm run build:dev
+npm run start
 ```
 
-This will build the project and not trigger `make-agent deploy`
-
-- using just `build` will trigger make-agent deploy and not work unless you provide your deployed plugin url using the `-u` flag.
-
-## Available Tools
-
-The template includes several pre-built tools:
-
-### 1. Blockchain Information
-
-- Endpoint: `/api/tools/get-blockchains`
-- Returns a randomized list of blockchain networks
-
-### 2. NEAR Transaction Generator
-
-- Endpoint: `/api/tools/create-near-transaction`
-- Creates NEAR transaction payloads for token transfers
-
-### 3. EVM Transaction Generator
-
-- Endpoint: `/api/tools/create-evm-transaction`
-- Creates EVM transaction payloads for native eth transfers
-
-### 4. Twitter Share
-
-- Endpoint: `/api/tools/twitter`
-- Generates Twitter share intent URLs
-
-### 5. Coin Flip
-
-- Endpoint: `/api/tools/coinflip`
-- Simple random coin flip generator
-
-### 6. Get User
-
-- Endpoint: `/api/tools/get-user`
-- Returns the user's account ID
-
-## AI Agent Configuration
-
-The template includes a pre-configured AI agent manifest at `/.well-known/ai-plugin.json`. You can customize the agent's behavior by modifying the configuration in `/api/ai-plugins/route.ts`. This route generates and returns the manifest object.
+The application will typically run on port 3000 unless configured otherwise via the `PORT` environment variable.
 
 ## Deployment
 
-1. Push your code to GitHub
-2. Deploy to Vercel or your preferred hosting platform
-3. Add your `BITTE_API_KEY` to the environment variables
-4. The `make-agent deploy` command will automatically run during build
+1.  **Host the Next.js Application**:
+    *   Deploy this Next.js application to a suitable hosting provider that supports Node.js (e.g., Vercel, Netlify, AWS, custom server).
+    *   Ensure the application is accessible via a public URL (e.g., `https://<YOUR_DEPLOYED_APP_URL>`).
+    *   Configure all necessary environment variables on the hosting platform.
 
-## Making your own agent
+2.  **OpenAPI / AI Plugin Endpoint**:
+    *   The AI plugin manifest and OpenAPI specification will be available at `https://<YOUR_DEPLOYED_APP_URL>/api/ai-plugin`. This URL is crucial for bitte.ai integration.
 
-Whether you want to add a tool to this boilerplate or make your own standalone agent tool, here's you'll need:
+3.  **Register/Deploy Agent to bitte.ai**:
+    *   The `package.json` contains a script `build:deploy`:
+        ```json
+        "build:deploy": "next build && make-agent deploy -u https://agent-next-boilerplate.vercel.app"
+        ```
+    *   This script uses the `make-agent` tool to deploy/register the agent with bitte.ai.
+    *   After deploying the Next.js application and obtaining its public URL, this command (or a similar one) needs to be executed, replacing `https://agent-next-boilerplate.vercel.app` with the actual public URL of your deployed application.
+        ```bash
+        make-agent deploy -u https://<YOUR_DEPLOYED_APP_URL>
+        ```
+    *   It's possible that `make-agent` requires authentication or further configuration to communicate with bitte.ai. Refer to `bitte.ai` or `make-agent` documentation for details.
 
-1. Make sure [`make-agent`](https://github.com/BitteProtocol/make-agent) is installed in your project:
+## Environment Variables
 
-```bash
-pnpm install --D make-agent
-```
+The following environment variables are required for the application to run correctly. Please configure them in your deployment environment:
 
-2. Set up a manifest following the OpenAPI specification that describes your agent and its paths.
-3. Have an api endpoint with the path `GET /api/ai-plugin` that returns your manifest
+-   `ACCOUNT_ID`: Your account ID on the bitte.ai platform. This is used in the AI plugin manifest.
+-   `NEXT_PUBLIC_HOST`: The public hostname of your deployed application (e.g., `my-agent.example.com`). This is used to construct the `PLUGIN_URL` if not deploying on Vercel.
+-   `PORT`: The port on which the application will run in the production environment (e.g., `3000` or `8080`). This is used to construct the `PLUGIN_URL` if not deploying on Vercel and if the `PORT` is not standard (80/443).
 
-## Setting up the manifest
+If deploying on Vercel, `PLUGIN_URL` might be automatically determined. However, it's good practice to set `NEXT_PUBLIC_HOST` explicitly for clarity and for the `make-agent deploy` command.
 
-Follow the [OpenAPI Specification](https://swagger.io/specification/#schema-1) to add the following fields in the manifest object:
+The `PLUGIN_URL` (the full public base URL of the agent, e.g., `https://my-agent.example.com`) is crucial. It will be either automatically derived (e.g., on Vercel) or constructed using `NEXT_PUBLIC_HOST` and `PORT`. This URL needs to be provided to the `make-agent deploy -u <PLUGIN_URL>` command.
 
-- `openapi`: The OpenAPI specification version that your manifest is following. Usually this is the latest version.
-- `info`: Object containing information about the agent, namely its 'title', 'description' and 'version'.
-- `servers`: Array of objects containing the urls for the deployed instances of the agent.
-- `paths`: Object containing all your agent's paths and their operations.
-- `"x-mb"`: Our custom field, containing the account id of the owner and an 'assistant' object with the agent's metadata, namely the tools it uses, and additional instructions to guide it.
+**Note**: Ensure that sensitive information is handled securely and not hardcoded.
 
-## Learn More
+## Contact
 
-- [Bitte Protocol Documentation](https://docs.bitte.ai)
-- [Next.js Documentation](https://nextjs.org/docs)
-- [OpenAPI Specification](https://swagger.io/specification/)
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## License
-
-MIT License
+For any questions regarding this project setup, please contact [Your Name/Team Contact].

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-export async function GET(request: Request) {
+export async function GET() {
     try {
         // TODO: Implement logic to fetch vesting options from Trebleswap smart contracts
         // or a configuration file.
