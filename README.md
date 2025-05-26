@@ -1,91 +1,107 @@
-# Agent Next.js Boilerplate for bitte.ai
+# Elvis DeFi Assistant - API Backend
 
-This project is a Next.js application that serves as an "Open Agent" for the bitte.ai platform. It provides a set of API endpoints defined in an OpenAPI-compatible format, which bitte.ai Runtime can interact with to perform tasks.
+Elvis, the ultimate DeFAI assistant for Trebleswap.com! This is a backend API service that provides DeFi tools and functionality through the bitte.ai platform.
 
-## Project Structure
+## 🎯 What is this?
 
--   `/src/app/api/tools/`: Contains the logic for individual tools (API endpoints) that the agent exposes.
--   `/src/app/api/ai-plugin/route.ts`: Generates the AI plugin manifest and OpenAPI specification required by bitte.ai. This is available at the `/api/ai-plugin` endpoint after deployment.
--   `/public/`: Static assets.
--   `.env`: Contains environment variables. **A corresponding production environment configuration will be required.**
+This is a **backend-only API service** that serves as an "Open Agent" for the [bitte.ai](https://bitte.ai) platform. It provides 17+ DeFi tools and functionality without any frontend interface - all interaction happens through bitte.ai's chat interface.
 
-## Prerequisites
+## 🚀 How it works
 
--   Node.js (version specified in `package.json` or latest LTS)
--   npm or pnpm
+1. **No Frontend**: This project contains only API endpoints, no UI
+2. **bitte.ai Integration**: Users interact with Elvis through bitte.ai's platform
+3. **OpenAPI Specification**: The `/api/ai-plugin` endpoint provides the complete API spec for bitte.ai
+4. **Agent Registration**: Deployed agents are registered with bitte.ai using `make-agent deploy`
 
-## Setup and Local Development
+## 🎸 Elvis Personality
 
-1.  Clone the repository.
-2.  Install dependencies:
-    ```bash
-    npm install
-    # or
-    pnpm install
-    ```
-3.  Create a `.env` file based on `.env.example` (if available) or provide necessary environment variables.
-4.  Run the development server:
-    ```bash
-    npm run dev
-    ```
-    The application will be available at `http://localhost:3000`. The AI plugin manifest will be at `http://localhost:3000/api/ai-plugin`.
+Elvis combines:
+- Historical Elvis Presley charm and catchphrases
+- Johnny Bravo's exaggerated confidence
+- Playful onomatopoeias ("Wham!", "Bam!", "Zap!", "Woah mama!")
+- Deep DeFi knowledge for Trebleswap
 
-## Build for Production
+## 🛠 Available API Endpoints
 
-To create a production build, run:
+### Core Tools
+- `/api/tools/get-blockchains` - List supported blockchains
+- `/api/tools/get-user` - Get user information
+- `/api/tools/coinflip` - Flip a coin (demo tool)
+
+### DeFi Operations
+- `/api/tools/gasless-swap` - Perform gasless token swaps
+- `/api/tools/classic-swap` - Traditional swaps with gas
+- `/api/tools/create-crosschain-swap` - Cross-chain swaps
+- `/api/tools/get-vault-info` - Treble vault information
+- `/api/tools/manage-liquidity` - Add/remove liquidity
+- `/api/tools/harvest-rewards` - Harvest farming rewards
+
+### TREB/xTREB Functions
+- `/api/tools/convert-treb-to-xtreb` - Convert TREB to xTREB
+- `/api/tools/stake-xtreb` - Stake xTREB tokens
+- `/api/tools/vesting-options` - Get vesting options
+
+### Analytics & Tools
+- `/api/tools/get-analytics` - Treble and Base chain analytics
+- `/api/tools/get-referral-link` - Generate referral links
+- `/api/tools/get-launchpad-tiers` - Treble Starter tiers
+- `/api/tools/twitter` - Generate Twitter share links
+
+### Blockchain Transactions
+- `/api/tools/create-near-transaction` - NEAR transaction payloads
+- `/api/tools/create-evm-transaction` - EVM transaction payloads
+
+## 🔧 Development
 
 ```bash
-npm run build
+# Install dependencies
+pnpm install
+
+# Start development server
+pnpm run dev:agent
+
+# Build for production
+pnpm run build
+
+# Deploy to Vercel and register with bitte.ai
+pnpm run build:deploy
 ```
 
-This will create an optimized build in the `.next` directory.
+## 📡 API Documentation
 
-## Running in Production
+The complete OpenAPI specification is available at `/api/ai-plugin` and includes:
+- All endpoint descriptions
+- Parameter requirements
+- Response schemas
+- Elvis personality configuration
 
-To start the application in production mode after a successful build:
+## 🌐 Deployment
 
+This service is deployed at: https://agent-next-boilerplate-chi.vercel.app
+
+### Agent Registration
+After deployment, the agent is registered with bitte.ai:
 ```bash
-npm run start
+npx make-agent deploy
 ```
 
-The application will typically run on port 3000 unless configured otherwise via the `PORT` environment variable.
+Agent ID: `agent-next-boilerplate-chi.vercel.app`
 
-## Deployment
+## 🎪 Interaction
 
-1.  **Host the Next.js Application**:
-    *   Deploy this Next.js application to a suitable hosting provider that supports Node.js (e.g., Vercel, Netlify, AWS, custom server).
-    *   Ensure the application is accessible via a public URL (e.g., `https://<YOUR_DEPLOYED_APP_URL>`).
-    *   Configure all necessary environment variables on the hosting platform.
+Users don't interact with this service directly. Instead:
+1. Visit [bitte.ai](https://bitte.ai)
+2. Search for "Elvis" or the agent ID
+3. Start chatting with Elvis about DeFi operations
+4. Elvis will call these API endpoints as tools to help users
 
-2.  **OpenAPI / AI Plugin Endpoint**:
-    *   The AI plugin manifest and OpenAPI specification will be available at `https://<YOUR_DEPLOYED_APP_URL>/api/ai-plugin`. This URL is crucial for bitte.ai integration.
+## 🔒 Environment Variables
 
-3.  **Register/Deploy Agent to bitte.ai**:
-    *   The `package.json` contains a script `build:deploy`:
-        ```json
-        "build:deploy": "next build && make-agent deploy -u https://agent-next-boilerplate.vercel.app"
-        ```
-    *   This script uses the `make-agent` tool to deploy/register the agent with bitte.ai.
-    *   After deploying the Next.js application and obtaining its public URL, this command (or a similar one) needs to be executed, replacing `https://agent-next-boilerplate.vercel.app` with the actual public URL of your deployed application.
-        ```bash
-        make-agent deploy -u https://<YOUR_DEPLOYED_APP_URL>
-        ```
-    *   It's possible that `make-agent` requires authentication or further configuration to communicate with bitte.ai. Refer to `bitte.ai` or `make-agent` documentation for details.
+```env
+ACCOUNT_ID=your-near-account.near
+PLUGIN_URL=https://your-domain.com
+```
 
-## Environment Variables
+## 🎵 Elvis Says
 
-The following environment variables are required for the application to run correctly. Please configure them in your deployment environment:
-
--   `ACCOUNT_ID`: Your account ID on the bitte.ai platform. This is used in the AI plugin manifest.
--   `NEXT_PUBLIC_HOST`: The public hostname of your deployed application (e.g., `my-agent.example.com`). This is used to construct the `PLUGIN_URL` if not deploying on Vercel.
--   `PORT`: The port on which the application will run in the production environment (e.g., `3000` or `8080`). This is used to construct the `PLUGIN_URL` if not deploying on Vercel and if the `PORT` is not standard (80/443).
-
-If deploying on Vercel, `PLUGIN_URL` might be automatically determined. However, it's good practice to set `NEXT_PUBLIC_HOST` explicitly for clarity and for the `make-agent deploy` command.
-
-The `PLUGIN_URL` (the full public base URL of the agent, e.g., `https://my-agent.example.com`) is crucial. It will be either automatically derived (e.g., on Vercel) or constructed using `NEXT_PUBLIC_HOST` and `PORT`. This URL needs to be provided to the `make-agent deploy -u <PLUGIN_URL>` command.
-
-**Note**: Ensure that sensitive information is handled securely and not hardcoded.
-
-## Contact
-
-For any questions regarding this project setup, please contact [Your Name/Team Contact].
+*"Thank ya, thank ya very much! Now you've got a lean, mean, DeFi machine that's ready to rock and roll on bitte.ai, baby! Wham!"*
