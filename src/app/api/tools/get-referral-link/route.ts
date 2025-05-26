@@ -1,121 +1,42 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
-export async function GET(request: NextRequest) {
-    try {
-        const { searchParams } = new URL(request.url);
-        const userId = searchParams.get('userId');
+// TODO: Implement actual logic for fetching user data and xTREB staking level
+// TODO: Implement logic to generate referral links based on userId and reward tier
 
-        if (!userId) {
-            return NextResponse.json(
-                { error: 'userId is required for generating referral link' },
-                { status: 400 }
-            );
-        }
+/**
+ * GET handler for the /api/tools/get-referral-link endpoint.
+ * 
+ * @param request The incoming NextRequest object.
+ * @returns A NextResponse object with the referral link or an error message.
+ */
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const userId = searchParams.get('userId');
 
-        // Mock user xTREB staking data to determine tier
-        const userStakingData = {
-            userId,
-            xTrebStaked: Math.floor(Math.random() * 50000) + 1000, // Random between 1000-51000
-            stakingDuration: Math.floor(Math.random() * 365) + 30, // Days staked
-            totalRewardsEarned: Math.floor(Math.random() * 10000) + 100
-        };
+  if (!userId) {
+    return NextResponse.json({ error: 'userId parameter is required, darlin\'. Uh-huh!' }, { status: 400 });
+  }
 
-        // Determine referral tier based on xTREB staked
-        let tier = 'Bronze';
-        let bonusPercentage = '0.05%';
-        let maxRewards = '$100';
-        
-        if (userStakingData.xTrebStaked >= 50000) {
-            tier = 'Platinum';
-            bonusPercentage = '0.25%';
-            maxRewards = '$2,500';
-        } else if (userStakingData.xTrebStaked >= 25000) {
-            tier = 'Gold';
-            bonusPercentage = '0.20%';
-            maxRewards = '$1,500';
-        } else if (userStakingData.xTrebStaked >= 10000) {
-            tier = 'Silver';
-            bonusPercentage = '0.15%';
-            maxRewards = '$750';
-        } else if (userStakingData.xTrebStaked >= 5000) {
-            tier = 'Bronze';
-            bonusPercentage = '0.10%';
-            maxRewards = '$300';
-        }
+  // Placeholder logic: In a real application, you would fetch user data,
+  // determine their xTREB staking level, and generate a unique referral link.
+  // The reward tier would also be determined by their staking level.
 
-        // Generate unique referral code
-        const referralCode = `ELVIS_${userId.slice(0, 6).toUpperCase()}_${Math.random().toString(36).substr(2, 6).toUpperCase()}`;
-        
-        // Create referral link
-        const baseUrl = 'https://trebleswap.com';
-        const referralLink = `${baseUrl}?ref=${referralCode}&utm_source=${userId}&utm_medium=referral&utm_campaign=elvis_defi`;
+  const userXStrebStakingLevel = 'high'; // Example: fetch this from your database
+  let rewardTierDescription = 'Standard Rewards';
+  let referralLink = `https://trebleswap.com/referral?user=${userId}`;
 
-        const referralData = {
-            referralLink,
-            referralCode,
-            user: {
-                id: userId,
-                tier,
-                xTrebStaked: userStakingData.xTrebStaked,
-                stakingDuration: userStakingData.stakingDuration
-            },
-            rewards: {
-                bonusPercentage,
-                maxMonthlyRewards: maxRewards,
-                totalEarned: '$0.00',
-                successfulReferrals: 0,
-                avgReferralValue: '$0.00'
-            },
-            benefits: {
-                referrer: [
-                    `💰 ${bonusPercentage} bonus on referred trading volume`,
-                    `📈 Progressive tier upgrades available`,
-                    `🎯 Maximum ${maxRewards}/month earnings`,
-                    `🔥 Extra TREB rewards for active referrers`
-                ],
-                referee: [
-                    '🎸 20% discount on trading fees (first month)',
-                    '💎 Welcome bonus: 100 TREB tokens',
-                    '🚀 Early access to new features',
-                    '📚 Exclusive Elvis DeFi tutorials'
-                ]
-            },
-            tierRequirements: {
-                'Bronze': '1,000+ xTREB staked',
-                'Silver': '5,000+ xTREB staked', 
-                'Gold': '10,000+ xTREB staked',
-                'Platinum': '25,000+ xTREB staked',
-                'Diamond': '50,000+ xTREB staked'
-            },
-            sharing: {
-                twitter: `🎸 Join me on @Trebleswap - the grooviest DeFi platform with Elvis as your guide! Get 20% off trading fees: ${referralLink} #TrebleSwap #DeFi #Elvis`,
-                discord: `Hey Treblenauts! 🎤 Ready to rock your DeFi game? Join Trebleswap with my referral link and get exclusive bonuses! ${referralLink}`,
-                telegram: `🎵 Thank ya, thank ya very much! Join the king of DeFi on Trebleswap: ${referralLink}`
-            },
-            analytics: {
-                trackingEnabled: true,
-                conversionTracking: true,
-                detailedReports: tier !== 'Bronze',
-                realTimeUpdates: true
-            },
-            expiry: 'Never (permanent link)',
-            created: new Date().toISOString()
-        };
+  if (userXStrebStakingLevel === 'high') {
+    rewardTierDescription = 'Platinum Record Rewards - you get more, baby!';
+    // Potentially modify the link or associated rewards
+    referralLink = `https://trebleswap.com/referral?user=${userId}&tier=platinum`;
+  } else if (userXStrebStakingLevel === 'medium') {
+    rewardTierDescription = 'Gold Record Rewards - pretty sweet, huh!';
+    referralLink = `https://trebleswap.com/referral?user=${userId}&tier=gold`;
+  }
 
-        console.log(`🎸 Elvis: Generated referral link for ${userId} (${tier} tier) - hotter than a platinum record, darlin'!`);
-
-        return NextResponse.json({
-            referralLink,
-            success: true,
-            message: `🎸 Your custom referral link is hotter than a platinum record, darlin'! You're ${tier} tier with ${bonusPercentage} bonus rewards!`,
-            details: referralData
-        });
-
-    } catch (error) {
-        console.error('Error in get-referral-link:', error);
-        return NextResponse.json(
-            { error: 'Failed to generate referral link' },
-            { status: 500 }
-        );
-    }
+  return NextResponse.json({
+    referralLink,
+    rewardTier: rewardTierDescription,
+    message: "Uh-huh, here's your custom referral link, hotter than a platinum record, darlin'! Go spread the word!",
+  });
 } 

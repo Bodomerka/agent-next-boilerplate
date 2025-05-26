@@ -24,28 +24,51 @@ Elvis combines:
 ## 🛠 Available API Endpoints
 
 ### Core Tools
-- `/api/tools/get-blockchains` - List supported blockchains
-- `/api/tools/get-user` - Get user information
-- `/api/tools/coinflip` - Flip a coin (demo tool)
+- **`/api/tools/get-blockchains`**:
+    - **Description**: Lists all blockchains supported by the platform.
+    - **Functionality**: Allows users or the system to identify which blockchains Elvis can interact with. This is crucial for operations like cross-chain swaps or transactions on specific blockchains.
+- **`/api/tools/get-user`**:
+    - **Description**: Retrieves information about a specific user.
+    - **Functionality**: Used for personalizing interactions, displaying user data (e.g., balances, transaction history), or authorizing certain actions. The specific information returned depends on the implementation.
 
 ### DeFi Operations
-- `/api/tools/gasless-swap` - Perform gasless token swaps
-- `/api/tools/classic-swap` - Traditional swaps with gas
-- `/api/tools/create-crosschain-swap` - Cross-chain swaps
-- `/api/tools/get-vault-info` - Treble vault information
-- `/api/tools/manage-liquidity` - Add/remove liquidity
-- `/api/tools/harvest-rewards` - Harvest farming rewards
+- **`/api/tools/gasless-swap`**:
+    - **Description**: Performs token swaps without requiring the user to pay for gas.
+    - **Functionality**: Enables users to exchange cryptocurrency tokens where the transaction fee (gas) is covered by another mechanism (e.g., relayers or special contracts), simplifying the process and reducing costs for the end-user.
+- **`/api/tools/create-crosschain-swap`**:
+    - **Description**: Creates a token swap operation between different blockchains.
+    - **Functionality**: Allows users to exchange assets from one blockchain to another. This complex operation typically involves bridges or cross-chain interaction protocols.
+- **`/api/tools/get-vault-info`**:
+    - **Description**: Provides information about Trebleswap vaults.
+    - **Functionality**: DeFi vaults are often used for staking, yield farming, or asset storage. This endpoint likely returns data about vault status, available assets, interest rates, etc.
+- **`/api/tools/manage-liquidity`**:
+    - **Description**: Allows adding or removing liquidity from pools.
+    - **Functionality**: On decentralized exchanges, users can provide liquidity in exchange for a share of trading fees. This endpoint allows users to manage their liquidity positions.
+- **`/api/tools/harvest-rewards`**:
+    - **Description**: Collects accumulated farming rewards.
+    - **Functionality**: Users who provide liquidity or stake tokens often earn rewards. This endpoint allows them to claim these earned rewards.
 
 ### TREB/xTREB Functions
-- `/api/tools/convert-treb-to-xtreb` - Convert TREB to xTREB
-- `/api/tools/stake-xtreb` - Stake xTREB tokens
-- `/api/tools/vesting-options` - Get vesting options
+- **`/api/tools/convert-treb-to-xtreb`**:
+    - **Description**: Converts TREB tokens to xTREB tokens.
+    - **Functionality**: xTREB is likely a derivative token of TREB, offering additional benefits such as voting rights, higher staking rewards, or other utilities within the Trebleswap ecosystem.
+- **`/api/tools/stake-xtreb`**:
+    - **Description**: Allows staking of xTREB tokens.
+    - **Functionality**: Staking xTREB likely enables users to earn passive income or other bonuses within the ecosystem.
+- **`/api/tools/vesting-options`**:
+    - **Description**: Retrieves information about available vesting options.
+    - **Functionality**: Vesting is the process of gradually unlocking tokens over a period. This endpoint provides information about the terms and schedules of vesting that may apply to certain tokens (e.g., received during a sale or as rewards).
 
 ### Analytics & Tools
-- `/api/tools/get-analytics` - Treble and Base chain analytics
-- `/api/tools/get-referral-link` - Generate referral links
-- `/api/tools/get-launchpad-tiers` - Treble Starter tiers
-- `/api/tools/twitter` - Generate Twitter share links
+- **`/api/tools/get-analytics`**:
+    - **Description**: Provides analytical data on Trebleswap and the Base chain.
+    - **Functionality**: Returns statistics, trends, trading volumes, user counts, or other relevant analytical information useful for users or for monitoring platform status.
+- **`/api/tools/get-launchpad-tiers`**:
+    - **Description**: Provides information about Treble Starter launchpad tiers.
+    - **Functionality**: Launchpad platforms often have a tier system determining user access to Initial DEX Offerings (IDOs). This endpoint provides details about these tiers and their requirements.
+- **`/api/tools/get-referral-link`**:
+    - **Description**: Fetches a custom progressive referral link for the user.
+    - **Functionality**: Generates a unique referral link. Higher xTREB staking by the user increases the referral rewards they can earn by sharing the link. The endpoint returns the link and a description of the current reward tier. (Elvis says: "Get your custom referral link hotter than a platinum record, darlin'!")
 
 ### Blockchain Transactions
 - `/api/tools/create-near-transaction` - NEAR transaction payloads
